@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
@@ -77,8 +77,6 @@ button {
     margin-top: 10px;
 }
 
-/* POPUP ORIGINAL */
-
 .popup {
     position: fixed;
     top: 50%;
@@ -95,19 +93,19 @@ button {
 
 .popup img {
     width: 100%;
-    height: auto; /* mantém proporção original */
     border-radius: 10px;
     margin-top: 10px;
 }
 
 /* BOTÃO X */
-.close-btn {
+.fechar-btn {
     position: absolute;
     top: 8px;
     right: 12px;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
     cursor: pointer;
+    color: black;
 }
 
 .popup.ativo {
@@ -160,7 +158,7 @@ Após essas charadas vamos escolher o lugar 💌
 </div>
 
 <div class="popup" id="popup">
-<span class="close-btn" onclick="fecharPopup()">×</span>
+<span class="fechar-btn" onclick="fecharPopup()">✖</span>
 <div id="popupTexto"></div>
 <img id="popupImg">
 </div>
@@ -193,6 +191,7 @@ function enviar() {
     tentativas++;
 
     if (etapa === 1) {
+
         if (valor === "sorriso") {
             mostrarPopup("Acertouuuu 😌✨<br><br>Seu sorriso nessa foto ilumina qualquer lugar!", "ela/foto-charada.jpg");
             document.getElementById("btnProxima").style.display = "block";
@@ -210,6 +209,7 @@ function enviar() {
     }
 
     else if (etapa === 2) {
+
         if (valor === "eu") {
             mostrarPopup("Acertouuuu 😌<br><br>Se o Da Vinci visse esses cachos, ele desistia da Mona Lisa na hora.", "ela/foto-charada2.jpg");
             document.getElementById("btnProxima").style.display = "block";
@@ -225,6 +225,7 @@ function enviar() {
     }
 
     else if (etapa === 3) {
+
         if (valor === "cachos") {
             mostrarPopup(
             "Acertou em cheio! 🎯✨<br><br>Olha como esse cabelo e esse sorriso estão brilhando nessa foto. Se a felicidade tivesse um rosto, com certeza seria esse aqui. Está gata demais!",
@@ -269,11 +270,13 @@ function proximaEtapa() {
     tentativas = 0;
     document.getElementById("chat").innerHTML = "";
     document.getElementById("btnProxima").style.display = "none";
+
     etapa++;
 
     if (etapa === 2) {
         adicionarMensagem("<b>Nova charada:</b><br><br>Se a gente estivesse em um museu, qual seria a obra de arte que teria a fila mais longa para ser vista?", "bot");
     }
+
     else if (etapa === 3) {
         adicionarMensagem("<b>Terceira charada:</b><br><br>O que é que você carrega com todo o cuidado, tem um volume incrível e, quando você junta com esse seu sorriso, vira a combinação mais perfeita do mundo?", "bot");
     }
