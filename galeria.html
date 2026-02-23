@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
@@ -77,33 +77,61 @@ button {
     margin-top: 10px;
 }
 
+/* POPUP NOVO */
+
 .popup {
     position: fixed;
-    top: 50%;
-    right: -500px;
-    transform: translateY(-50%);
-    width: 350px;
-    background: white;
-    color: black;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
-    transition: 0.5s;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
 }
 
-.popup img {
+.popup.ativo {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.popup-content {
+    background: white;
+    color: black;
+    width: 90%;
+    max-width: 320px;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    animation: aparecer 0.3s ease;
+}
+
+.popup-content img {
     width: 100%;
+    max-height: 250px;
+    object-fit: cover;
     border-radius: 10px;
     margin-top: 10px;
 }
 
-.popup.ativo {
-    right: 30px;
+.close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-/* RESPONSIVO CELULAR */
-@media (max-width: 768px){
+@keyframes aparecer {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
 
+/* RESPONSIVO */
+@media (max-width: 768px){
 body{
     align-items: flex-start;
     padding-top: 30px;
@@ -112,15 +140,6 @@ body{
 
 .chat-container{
     width: 95%;
-}
-
-.popup{
-    width: 90%;
-    right: -100%;
-}
-
-.popup.ativo{
-    right: 5%;
 }
 }
 </style>
@@ -146,9 +165,13 @@ Após essas charadas vamos escolher o lugar 💌
 
 </div>
 
+<!-- POPUP -->
 <div class="popup" id="popup">
-<div id="popupTexto"></div>
-<img id="popupImg">
+  <div class="popup-content">
+    <span class="close-btn" onclick="fecharPopup()">×</span>
+    <div id="popupTexto"></div>
+    <img id="popupImg">
+  </div>
 </div>
 
 <script>
@@ -178,9 +201,7 @@ function enviar() {
 
     tentativas++;
 
-    // PRIMEIRA
     if (etapa === 1) {
-
         if (valor === "sorriso") {
             mostrarPopup("Acertouuuu 😌✨<br><br>Seu sorriso nessa foto ilumina qualquer lugar!", "ela/foto-charada.jpg");
             document.getElementById("btnProxima").style.display = "block";
@@ -197,9 +218,7 @@ function enviar() {
             adicionarMensagem("Cansei kkkkkk a palavra seria Sorriso so digitar abaixo", "bot");
     }
 
-    // SEGUNDA
     else if (etapa === 2) {
-
         if (valor === "eu") {
             mostrarPopup("Acertouuuu 😌<br><br>Se o Da Vinci visse esses cachos, ele desistia da Mona Lisa na hora.", "ela/foto-charada2.jpg");
             document.getElementById("btnProxima").style.display = "block";
@@ -214,9 +233,7 @@ function enviar() {
             adicionarMensagem("Última dica: cansei novamente kkkkkkkkk a palavra seria Eu, só digitar abaixo 😌", "bot");
     }
 
-    // TERCEIRA
     else if (etapa === 3) {
-
         if (valor === "cachos") {
             mostrarPopup(
             "Acertou em cheio! 🎯✨<br><br>Olha como esse cabelo e esse sorriso estão brilhando nessa foto. Se a felicidade tivesse um rosto, com certeza seria esse aqui. Está gata demais!",
@@ -257,18 +274,15 @@ function fecharPopup() {
 }
 
 function proximaEtapa() {
-
     fecharPopup();
     tentativas = 0;
     document.getElementById("chat").innerHTML = "";
     document.getElementById("btnProxima").style.display = "none";
-
     etapa++;
 
     if (etapa === 2) {
         adicionarMensagem("<b>Nova charada:</b><br><br>Se a gente estivesse em um museu, qual seria a obra de arte que teria a fila mais longa para ser vista?", "bot");
     }
-
     else if (etapa === 3) {
         adicionarMensagem("<b>Terceira charada:</b><br><br>O que é que você carrega com todo o cuidado, tem um volume incrível e, quando você junta com esse seu sorriso, vira a combinação mais perfeita do mundo?", "bot");
     }
