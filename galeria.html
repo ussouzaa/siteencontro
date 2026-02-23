@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio Antes do Encontro 💌</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 420px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 85%;
+}
+
+.bot {
+    background: #ffd369;
+    color: black;
+}
+
+.user {
+    background: #00adb5;
+    align-self: flex-end;
+}
+
+.input-area {
+    display: flex;
+    gap: 5px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    width: 75%;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #ffd369;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#btnProxima, #btnFinal {
+    display: none;
+    margin-top: 10px;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    right: -500px;
+    transform: translateY(-50%);
+    width: 350px;
+    background: white;
+    color: black;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    transition: 0.5s;
+}
+
+.popup img {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.popup.ativo {
+    right: 30px;
+}
+
+/* RESPONSIVO CELULAR */
+@media (max-width: 768px){
+
+body{
+    align-items: flex-start;
+    padding-top: 30px;
+    height: auto;
+}
+
+.chat-container{
+    width: 95%;
+}
+
+.popup{
+    width: 90%;
+    right: -100%;
+}
+
+.popup.ativo{
+    right: 5%;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+
+<div class="chat-box" id="chat"></div>
+
+<div class="input-area">
+<input type="text" id="resposta" placeholder="Digite sua resposta...">
+<button onclick="enviar()">Enviar</button>
+</div>
+
+<button id="btnProxima" onclick="proximaEtapa()">
+Ir para a próxima charada ➜
+</button>
+
+<button id="btnFinal" onclick="irParaLugares()">
+Após essas charadas vamos escolher o lugar 💌
+</button>
+
+</div>
+
+<div class="popup" id="popup">
+<div id="popupTexto"></div>
+<img id="popupImg">
+</div>
+
+<script>
+
+let etapa = 1;
+let tentativas = 0;
+
+iniciarPrimeiraCharada();
+
+function iniciarPrimeiraCharada() {
+    document.getElementById("chat").innerHTML = `
+    <div class="message bot">
+    Antes de escolher o encontro 💕<br><br>
+    Responde essa charada:<br><br>
+    <b>O que ilumina qualquer lugar sem precisar de energia?</b>
+    </div>`;
+}
+
+function enviar() {
+
+    let input = document.getElementById("resposta");
+    let valor = input.value.toLowerCase().trim();
+    if (valor === "") return;
+
+    adicionarMensagem(input.value, "user");
+    input.value = "";
+
+    tentativas++;
+
+    // PRIMEIRA
+    if (etapa === 1) {
+
+        if (valor === "sorriso") {
+            mostrarPopup("Acertouuuu 😌✨<br><br>Seu sorriso nessa foto ilumina qualquer lugar!", "ela/foto-charada.jpg");
+            document.getElementById("btnProxima").style.display = "block";
+            return;
+        }
+
+        if (tentativas === 1)
+            adicionarMensagem("Vou dar dica começa com S e termina com O", "bot");
+        else if (tentativas === 2)
+            adicionarMensagem("O que a propaganda de creme dental mais pede", "bot");
+        else if (tentativas === 3)
+            adicionarMensagem("Mais uma dica: Linguagem universal da alegria", "bot");
+        else
+            adicionarMensagem("Cansei kkkkkk a palavra seria Sorriso so digitar abaixo", "bot");
+    }
+
+    // SEGUNDA
+    else if (etapa === 2) {
+
+        if (valor === "eu") {
+            mostrarPopup("Acertouuuu 😌<br><br>Se o Da Vinci visse esses cachos, ele desistia da Mona Lisa na hora.", "ela/foto-charada2.jpg");
+            document.getElementById("btnProxima").style.display = "block";
+            return;
+        }
+
+        if (tentativas === 1)
+            adicionarMensagem("Vou dar dica em, Você conhece a pessoa e vive com ela todo dia", "bot");
+        else if (tentativas === 2)
+            adicionarMensagem("Mais uma dica: É a primeira palavra que qualquer pessoa usa quando começa a falar de si mesma.", "bot");
+        else
+            adicionarMensagem("Última dica: cansei novamente kkkkkkkkk a palavra seria Eu, só digitar abaixo 😌", "bot");
+    }
+
+    // TERCEIRA
+    else if (etapa === 3) {
+
+        if (valor === "cachos") {
+            mostrarPopup(
+            "Acertou em cheio! 🎯✨<br><br>Olha como esse cabelo e esse sorriso estão brilhando nessa foto. Se a felicidade tivesse um rosto, com certeza seria esse aqui. Está gata demais!",
+            "ela/foto-charada3.png"
+            );
+            document.getElementById("btnFinal").style.display = "block";
+            return;
+        }
+
+        if (tentativas === 1)
+            adicionarMensagem("Na foto que está escondida, o sol está refletindo exatamente neles.", "bot");
+        else if (tentativas === 2)
+            adicionarMensagem("Começa com 'C' e é a moldura perfeita do seu sorriso.", "bot");
+        else if (tentativas === 3)
+            adicionarMensagem("É a coroa natural que você nunca tira da cabeça.", "bot");
+        else
+            adicionarMensagem("Seus cachos só digitar abaixo 😌", "bot");
+    }
+}
+
+function adicionarMensagem(texto, tipo) {
+    let chat = document.getElementById("chat");
+    let msg = document.createElement("div");
+    msg.className = "message " + tipo;
+    msg.innerHTML = texto;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function mostrarPopup(texto, imagem) {
+    document.getElementById("popupTexto").innerHTML = texto;
+    document.getElementById("popupImg").src = imagem;
+    document.getElementById("popup").classList.add("ativo");
+}
+
+function fecharPopup() {
+    document.getElementById("popup").classList.remove("ativo");
+}
+
+function proximaEtapa() {
+
+    fecharPopup();
+    tentativas = 0;
+    document.getElementById("chat").innerHTML = "";
+    document.getElementById("btnProxima").style.display = "none";
+
+    etapa++;
+
+    if (etapa === 2) {
+        adicionarMensagem("<b>Nova charada:</b><br><br>Se a gente estivesse em um museu, qual seria a obra de arte que teria a fila mais longa para ser vista?", "bot");
+    }
+
+    else if (etapa === 3) {
+        adicionarMensagem("<b>Terceira charada:</b><br><br>O que é que você carrega com todo o cuidado, tem um volume incrível e, quando você junta com esse seu sorriso, vira a combinação mais perfeita do mundo?", "bot");
+    }
+}
+
+function irParaLugares(){
+    window.location.href = "lugares.html";
+}
+
+</script>
+
+</body>
+</html>
